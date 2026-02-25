@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
     selector: 'app-edit-form',
     templateUrl: './edit-form.component.html',
     styleUrls: ['./edit-form.component.css'],
-    standalone: false
+    standalone: true
 })
 export class EditFormComponent {
 

@@ -1,1 +1,16 @@
-<p>create-form works!</p>
+<div class="create-form-container">
+  <h2>Créer une nouvelle news</h2>
+  <form (ngSubmit)="createNews()" #newsForm="ngForm">
+    <mat-form-field appearance="fill">
+      <mat-label>Titre</mat-label>
+      <input matInput placeholder="Entrez le titre de la news" name="title" [(ngModel)]="formData.title" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Contenu</mat-label>
+      <textarea matInput placeholder="Entrez le contenu de la news" name="content" [(ngModel)]="formData.content" required></textarea>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" type="submit" [disabled]="!newsForm.form.valid">Créer</button>
+  </form>
+</div>
