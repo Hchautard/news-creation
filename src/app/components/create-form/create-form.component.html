@@ -1,16 +1,69 @@
-<div class="create-form-container">
-  <h2>Créer une nouvelle news</h2>
-  <form (ngSubmit)="createNews()" #newsForm="ngForm">
-    <mat-form-field appearance="fill">
-      <mat-label>Titre</mat-label>
-      <input matInput placeholder="Entrez le titre de la news" name="title" [(ngModel)]="formData.title" required>
-    </mat-form-field>
+<div class="create-form-container mt-4">
+  <h2 class="title is-2">Créer une nouvelle news</h2>
+  <form (ngSubmit)="createNews()" #newsForm="ngForm" class="box">
 
-    <mat-form-field appearance="fill">
-      <mat-label>Contenu</mat-label>
-      <textarea matInput placeholder="Entrez le contenu de la news" name="content" [(ngModel)]="formData.content" required></textarea>
-    </mat-form-field>
+    <!-- Titre -->
+    <div class="field">
+      <label class="label">Titre</label>
+      <div class="control">
+        <input class="input" type="text" placeholder="Entrez le titre de la news" name="title" [(ngModel)]="formData.title" required>
+      </div>
+    </div>
 
-    <button mat-raised-button color="primary" type="submit" [disabled]="!newsForm.form.valid">Créer</button>
+    <!-- Description -->
+    <div class="field">
+      <label class="label">Description</label>
+      <div class="control">
+        <textarea class="textarea" placeholder="Entrez une description courte" name="description" [(ngModel)]="formData.description" required></textarea>
+      </div>
+    </div>
+
+    <!-- Contenu -->
+    <div class="field">
+      <label class="label">Contenu</label>
+      <div class="control">
+        <textarea class="textarea" placeholder="Entrez le contenu de la news" name="content" [(ngModel)]="formData.content" required></textarea>
+      </div>
+    </div>
+
+    <!-- Date de l'événement -->
+    <div class="field">
+      <label class="label">Date de l'événement</label>
+      <div class="control">
+        <input class="input" type="date" name="date_event" [(ngModel)]="formData.date_event">
+      </div>
+    </div>
+
+    <!-- Catégorie -->
+    <div class="field">
+      <label class="label">Catégorie</label>
+      <div class="control">
+        <input class="input" type="text" placeholder="Entrez la catégorie" name="category" [(ngModel)]="formData.category">
+      </div>
+    </div>
+
+    <!-- Lieu -->
+    <div class="field">
+      <label class="label">Lieu</label>
+      <div class="control">
+        <input class="input" type="text" placeholder="Entrez le lieu" name="location" [(ngModel)]="formData.location">
+      </div>
+    </div>
+
+    <!-- Image -->
+    <div class="field">
+      <label class="label">Image (URL)</label>
+      <div class="control">
+        <input class="input" type="url" placeholder="Entrez l'URL de l'image" name="image" [(ngModel)]="formData.image" disabled>
+      </div>
+    </div>
+
+    <!-- Bouton de soumission -->
+    <div class="field is-grouped">
+      <div class="control">
+        <button class="button is-primary" type="submit" [disabled]="!newsForm.form.valid">Créer</button>
+      </div>
+    </div>
+
   </form>
 </div>
