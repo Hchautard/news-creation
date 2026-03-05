@@ -25,4 +25,13 @@ export class DatabaseService {
     }
     return data;
   }
+
+  async createNews(news: News): Promise<void> {
+    const { data, error } = await this.supabase.from('news').insert(news);
+    if (error) {
+      console.error(error);
+    } else {
+      console.log('News item created:', data);
+    }
+  }
 }

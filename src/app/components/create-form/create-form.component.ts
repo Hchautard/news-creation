@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {MatFormField, MatInput, MatLabel} from "@angular/material/input";
+import { DatabaseService } from '../../services/db.service';
 
 @Component({
   selector: 'app-create-form',
@@ -11,6 +12,11 @@ import {MatFormField, MatInput, MatLabel} from "@angular/material/input";
   imports: [FormsModule, MatFormField, MatInput, MatLabel]
 })
 export class CreateFormComponent {
+
+  constructor(
+    private database: DatabaseService
+  ) {}
+
   formData = {
     title: '',
     description: '',
@@ -22,6 +28,10 @@ export class CreateFormComponent {
   };
 
   createNews() {
-    console.log('News item created:', this);
+    this.database.createNews(this.formData).then((news) => {
+      console.log(news)
+    }).catch((error) => {
+      console.error(error)
+    })
   }
 }
