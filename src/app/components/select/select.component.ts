@@ -48,7 +48,9 @@ export class SelectComponent {
   @Input() newsList: News[] = [];
 
   /** The labels that are available for selection. */
-  labels = ['Important', 'Starred', 'Work', 'Personal', 'To Do', 'Later', 'Read', 'Travel'];
+  labels = computed(() => [...new Set(this.newsList.map((news) => news.title))]);
+
+
   constructor() {
     // Scrolls to the active item when the active option changes.
     // The slight delay here is to ensure animations are done before scrolling.
