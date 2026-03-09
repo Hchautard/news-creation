@@ -1,6 +1,6 @@
 <div class="edit-form-container mt-4">
   <h2 class="title is-2">Modifier la news</h2>
-  <app-select [newsList]="newsList"></app-select>
+  <app-select [newsList]="newsList" (newsSelected)="onNewsSelected($event)"></app-select>
   <form (ngSubmit)="updateNews()" #editForm="ngForm" class="box">
 
     <!-- Titre -->
@@ -55,7 +55,7 @@
     <div class="field">
       <label class="label">Image (URL)</label>
       <div class="control">
-        <input class="input" type="url" placeholder="Entrez l'URL de l'image" name="image" [(ngModel)]="formData.image">
+        <input class="input" type="url" placeholder="Entrez l'URL de l'image" name="image" [(ngModel)]="formData.image" disabled>
       </div>
     </div>
 

@@ -16,12 +16,16 @@
       <div class="example-popup-container">
         <div ngListbox>
           @for (label of labels(); track label) {
-            <div ngOption [value]="label" [label]="label">
+            <div ngOption
+                 [value]="label"
+                 [label]="label"
+                 (click)="onOptionSelected(label)">
               <span class="example-option-text">{{ label }}</span>
               <span class="example-option-check material-symbols-outlined" translate="no" aria-hidden="true">check</span>
             </div>
           }
         </div>
+
 
       </div>
     </ng-template>

@@ -12,6 +12,8 @@ import {
   computed, Input,
   viewChild,
   viewChildren,
+  Output,
+  EventEmitter
 } from '@angular/core';
 import {OverlayModule} from '@angular/cdk/overlay';
 import News from "../../models/News";
@@ -46,10 +48,10 @@ export class SelectComponent {
   });
 
   @Input() newsList: News[] = [];
+  @Output() newsSelected = new EventEmitter<News>();
 
   /** The labels that are available for selection. */
   labels = computed(() => [...new Set(this.newsList.map((news) => news.title))]);
-
 
   constructor() {
     // Scrolls to the active item when the active option changes.
@@ -64,5 +66,12 @@ export class SelectComponent {
         setTimeout(() => this.listbox()?.element.scrollTo(0, 0), 150);
       }
     });
+  }
+
+  onOptionSelected(label: string) {
+    const selectedNews = this.newsList.find(news => news.title === label);
+    if (selectedNews) {
+      this.newsSelected.emit(selectedNews);
+    }
   }
 }

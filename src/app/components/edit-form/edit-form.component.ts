@@ -23,7 +23,7 @@ export class EditFormComponent implements OnInit {
     title: '',
     description: '',
     content: '',
-    date_event: '',
+    date_event: Date.now().toString(),
     category: '',
     location: '',
     image: null,
@@ -43,6 +43,22 @@ export class EditFormComponent implements OnInit {
     }).catch((error) => {
       console.error(error);
     });
+  }
+
+  onNewsSelected(news: News) {
+
+    let dateEvent: Date;
+    dateEvent = new Date(news.date_event);
+
+    this.formData = {
+      title: news.title,
+      description: news.description,
+      content: news.content,
+      date_event: dateEvent.toISOString().substring(0, 10), // Format as YYYY-MM-DD for input[type="date"]
+      category: news.category,
+      location: news.location,
+      image: null,
+    };
   }
 
   updateNews() {
