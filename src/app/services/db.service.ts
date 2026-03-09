@@ -34,4 +34,13 @@ export class DatabaseService {
       console.log('News item created:', data);
     }
   }
+
+  async patchNews(news: Partial<News>): Promise<void> {
+    const { data, error } = await this.supabase.from('news').update(news).eq('id', news.id);
+    if (error) {
+      console.error(error);
+    } else {
+      console.log('News item updated:', data);
+    }
+  }
 }

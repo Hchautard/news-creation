@@ -1,7 +1,12 @@
 <div class="edit-form-container mt-4">
   <h2 class="title is-2">Modifier la news</h2>
-  <app-select [newsList]="newsList" (newsSelected)="onNewsSelected($event)"></app-select>
-  <form (ngSubmit)="updateNews()" #editForm="ngForm" class="box">
+
+  <div class="box is-flex is-flex-direction-row is-justify-content-space-evenly">
+    <p class="subtitle is-4">Sélectionnez une news à modifier :</p>
+    <app-select [newsList]="newsList" (newsSelected)="onNewsSelected($event)"></app-select>
+  </div>
+
+  <form (ngSubmit)="onUpdate()" #editForm="ngForm" class="box">
 
     <!-- Titre -->
     <div class="field">
@@ -23,7 +28,7 @@
     <div class="field">
       <label class="label">Contenu</label>
       <div class="control">
-        <textarea class="textarea" placeholder="Entrez le contenu de la news" name="content" [(ngModel)]="formData.content" required></textarea>
+        <textarea class="textarea" placeholder="Entrez le contenu de la news" name="content" [(ngModel)]="formData.content"></textarea>
       </div>
     </div>
 

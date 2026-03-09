@@ -20,6 +20,7 @@ export class EditFormComponent implements OnInit {
   ) {}
 
   formData = {
+    id: 0,
     title: '',
     description: '',
     content: '',
@@ -46,11 +47,12 @@ export class EditFormComponent implements OnInit {
   }
 
   onNewsSelected(news: News) {
-
+    console.log('Selected news:', news);
     let dateEvent: Date;
     dateEvent = new Date(news.date_event);
 
     this.formData = {
+      id: news.id || 0,
       title: news.title,
       description: news.description,
       content: news.content,
@@ -61,8 +63,12 @@ export class EditFormComponent implements OnInit {
     };
   }
 
-  updateNews() {
-    console.log('News item created:', this);
+  onUpdate() {
+    this.database.patchNews(this.formData).then((news) => {
+      console.log(news)
+    }).catch((error) => {
+      console.error(error)
+    });
   }
 
 }

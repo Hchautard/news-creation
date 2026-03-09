@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {MatFormField, MatInput, MatLabel} from "@angular/material/input";
 import { DatabaseService } from '../../services/db.service';
+import News from "../../models/News";
 
 @Component({
   selector: 'app-create-form',
@@ -17,21 +18,21 @@ export class CreateFormComponent {
     private database: DatabaseService
   ) {}
 
-  formData = {
+  formData: Omit<News, 'id'> = {
     title: '',
     description: '',
     content: '',
-    date_event: '',
+    date_event: new Date().toISOString().substring(0, 10),
     category: '',
     location: '',
     image: null,
   };
 
-  createNews() {
+  onCreate() {
     this.database.createNews(this.formData).then((news) => {
-      console.log(news)
+      console.log('Created news:', news);
     }).catch((error) => {
-      console.error(error)
-    })
+      console.error('Error creating news:', error);
+    });
   }
 }
