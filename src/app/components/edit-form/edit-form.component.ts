@@ -1,23 +1,26 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {FormsModule} from "@angular/forms";
-import {MatFormField, MatInput, MatLabel} from "@angular/material/input";
 import News from "../../models/News";
 import {DatabaseService} from "../../services/db.service";
 import {SelectComponent} from "../select/select.component";
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
   selector: 'app-edit-form',
   templateUrl: './edit-form.component.html',
   styleUrls: ['./edit-form.component.css'],
-  imports: [FormsModule, MatFormField, MatInput, MatLabel, SelectComponent],
+  imports: [FormsModule, SelectComponent],
 
   standalone: true
 })
 export class EditFormComponent implements OnInit {
 
+  toastr = inject(ToastrService);
+
   constructor(
     private database: DatabaseService
-  ) {}
+  ) {
+  }
 
   formData = {
     id: 0,
@@ -47,7 +50,6 @@ export class EditFormComponent implements OnInit {
   }
 
   onNewsSelected(news: News) {
-    console.log('Selected news:', news);
     let dateEvent: Date;
     dateEvent = new Date(news.date_event);
 
@@ -64,11 +66,24 @@ export class EditFormComponent implements OnInit {
   }
 
   onUpdate() {
-    this.database.patchNews(this.formData).then((news) => {
-      console.log(news)
-    }).catch((error) => {
-      console.error(error)
-    });
-  }
+    const payload: any = {};
+    for (const [key, value] of Object.entries(this.formData)) {
+      if (value !== null) {
+        payload[key] = value;
+      }
+    }
 
+    this.database.patchNews(payload)
+      .then((updatedNews) => {
+        if (updatedNews) {
+          this.toastr.success('La mise à jour a réussi', 'Succès !');
+          this.loadNews();
+          this.onNewsSelected(updatedNews);
+        }
+      })
+      .catch((error) => {
+        this.toastr.error('La mise à jour a échoué', 'Erreur !');
+        console.error(error);
+      });
+  }
 }

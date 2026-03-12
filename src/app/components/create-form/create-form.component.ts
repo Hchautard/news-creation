@@ -1,6 +1,5 @@
 import {Component} from '@angular/core';
 import {FormsModule} from '@angular/forms';
-import {MatFormField, MatInput, MatLabel} from "@angular/material/input";
 import { DatabaseService } from '../../services/db.service';
 import News from "../../models/News";
 
@@ -10,7 +9,7 @@ import News from "../../models/News";
   styleUrls: ['./create-form.component.css'],
   standalone: true,
 
-  imports: [FormsModule, MatFormField, MatInput, MatLabel]
+  imports: [FormsModule]
 })
 export class CreateFormComponent {
 

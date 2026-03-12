@@ -35,12 +35,20 @@ export class DatabaseService {
     }
   }
 
-  async patchNews(news: Partial<News>): Promise<void> {
-    const { data, error } = await this.supabase.from('news').update(news).eq('id', news.id);
+  async patchNews(news: Partial<News>): Promise<News | null> {
+    const { data, error } = await this.supabase
+      .from('news')
+      .update(news)
+      .eq('id', news.id)
+      .select()
+      .single();
+
     if (error) {
       console.error(error);
+      return null;
     } else {
-      console.log('News item updated:', data);
+      return data;
     }
   }
+
 }

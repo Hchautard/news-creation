@@ -23,6 +23,7 @@
     "@angular/router": "^21.2.0",
     "@supabase/supabase-js": "^2.98.0",
     "bulma": "^1.0.4",
+    "ngx-toastr": "^20.0.5",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.1"

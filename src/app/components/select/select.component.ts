@@ -9,7 +9,7 @@ import {
   afterRenderEffect,
   ChangeDetectionStrategy,
   Component,
-  computed, Input,
+  computed, input,
   viewChild,
   viewChildren,
   Output,
@@ -47,11 +47,11 @@ export class SelectComponent {
     return values.length ? values[0] : 'Sélectionner une news';
   });
 
-  @Input() newsList: News[] = [];
+  newsList = input<News[]>([]);
   @Output() newsSelected = new EventEmitter<News>();
 
   /** The labels that are available for selection. */
-  labels = computed(() => [...new Set(this.newsList.map((news) => news.title))]);
+  labels = computed(() => this.newsList().map(news => ({ id: news.id, title: news.title })));
 
   constructor() {
     // Scrolls to the active item when the active option changes.
@@ -68,8 +68,8 @@ export class SelectComponent {
     });
   }
 
-  onOptionSelected(label: string) {
-    const selectedNews = this.newsList.find(news => news.title === label);
+  onOptionSelected(id: number | undefined) {
+    const selectedNews = this.newsList().find(news => news.id === id);
     if (selectedNews) {
       this.newsSelected.emit(selectedNews);
     }

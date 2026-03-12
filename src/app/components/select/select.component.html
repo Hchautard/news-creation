@@ -15,12 +15,12 @@
     >
       <div class="example-popup-container">
         <div ngListbox>
-          @for (label of labels(); track label) {
+          @for (item of labels(); track item.id) {
             <div ngOption
-                 [value]="label"
-                 [label]="label"
-                 (click)="onOptionSelected(label)">
-              <span class="example-option-text">{{ label }}</span>
+                 [value]="item.title"
+                 [label]="item.title"
+                 (click)="onOptionSelected(item.id)">
+              <span class="example-option-text">{{ item.title }}</span>
               <span class="example-option-check material-symbols-outlined" translate="no" aria-hidden="true">check</span>
             </div>
           }
