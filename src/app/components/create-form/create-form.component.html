@@ -37,9 +37,11 @@
     <!-- Catégorie -->
     <div class="field">
       <label class="label">Catégorie</label>
-      <div class="control">
-        <input class="input" type="text" placeholder="Entrez la catégorie" name="category" [(ngModel)]="formData.category">
-      </div>
+      <app-category-select
+        [categories]="existingCategories"
+        [value]="formData.category"
+        (valueChange)="onCategoryChange($event)">
+      </app-category-select>
     </div>
 
     <!-- Lieu -->

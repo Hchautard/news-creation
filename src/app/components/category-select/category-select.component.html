@@ -1,0 +1,57 @@
+<div class="category-select-wrapper">
+  <div class="field">
+    <div class="control has-icons-right">
+      <input
+        class="input"
+        type="text"
+        [placeholder]="isCreatingNew ? 'Saisissez une nouvelle catégorie...' : 'Rechercher ou sélectionner une catégorie...'"
+        [(ngModel)]="inputValue"
+        (focus)="onFocus()"
+        (blur)="onBlur()"
+        (ngModelChange)="onInputChange()"
+        name="categoryInput"
+      />
+      <span class="icon is-small is-right">
+        <i class="material-symbols-outlined" translate="no" aria-hidden="true" style="font-size: 18px;">
+          {{ isOpen ? 'expand_less' : 'expand_more' }}
+        </i>
+      </span>
+    </div>
+  </div>
+
+  <!-- Dropdown des catégories -->
+  <div class="dropdown-menu category-dropdown" *ngIf="isOpen" role="menu">
+    <div class="dropdown-content">
+
+      <!-- Option : Créer une nouvelle catégorie -->
+      <a class="dropdown-item has-text-info is-flex is-align-items-center"
+         (mousedown)="startCreatingNew(); $event.preventDefault()">
+        <span class="icon is-small mr-2">
+          <i class="material-symbols-outlined" translate="no" style="font-size: 18px;">add_circle</i>
+        </span>
+        <span><strong>Créer une nouvelle catégorie</strong></span>
+      </a>
+
+      <hr class="dropdown-divider" *ngIf="filteredCategories.length > 0" />
+
+      <!-- Liste des catégories existantes -->
+      <a class="dropdown-item"
+         *ngFor="let cat of filteredCategories"
+         [class.is-active]="cat === value"
+         (mousedown)="selectCategory(cat); $event.preventDefault()">
+        <span class="is-flex is-align-items-center is-justify-content-space-between" style="width:100%">
+          <span>{{ cat }}</span>
+          <span class="icon is-small has-text-success" *ngIf="cat === value">
+            <i class="material-symbols-outlined" translate="no" style="font-size: 18px;">check</i>
+          </span>
+        </span>
+      </a>
+
+      <!-- Aucun résultat -->
+      <div class="dropdown-item has-text-grey" *ngIf="filteredCategories.length === 0 && inputValue">
+        <em>Aucune catégorie correspondante — saisissez pour en créer une nouvelle</em>
+      </div>
+
+    </div>
+  </div>
+</div>

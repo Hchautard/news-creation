@@ -1,26 +1,23 @@
-import {Component, inject, OnInit} from '@angular/core';
-import {FormsModule} from "@angular/forms";
-import News from "../../models/News";
-import {DatabaseService} from "../../services/db.service";
-import {SelectComponent} from "../select/select.component";
-import {ToastrService} from 'ngx-toastr';
+import { Component, inject, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import News from '../../models/News';
+import { DatabaseService } from '../../services/db.service';
+import { SelectComponent } from '../select/select.component';
+import { CategorySelectComponent } from '../category-select/category-select.component';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-edit-form',
   templateUrl: './edit-form.component.html',
   styleUrls: ['./edit-form.component.css'],
-  imports: [FormsModule, SelectComponent],
-
-  standalone: true
+  imports: [FormsModule, SelectComponent, CategorySelectComponent],
+  standalone: true,
 })
 export class EditFormComponent implements OnInit {
 
   toastr = inject(ToastrService);
 
-  constructor(
-    private database: DatabaseService
-  ) {
-  }
+  constructor(private database: DatabaseService) {}
 
   formData = {
     id: 0,
@@ -35,6 +32,8 @@ export class EditFormComponent implements OnInit {
 
   newsList: News[] = [];
 
+  existingCategories: string[] = [];
+
   ngOnInit() {
     this.loadNews();
   }
@@ -43,6 +42,7 @@ export class EditFormComponent implements OnInit {
     this.database.getNews().then((news) => {
       if (news) {
         this.newsList = news;
+        this.existingCategories = this.extractUniqueCategories(news);
       }
     }).catch((error) => {
       console.error(error);
@@ -58,11 +58,15 @@ export class EditFormComponent implements OnInit {
       title: news.title,
       description: news.description,
       content: news.content,
-      date_event: dateEvent.toISOString().substring(0, 10), // Format as YYYY-MM-DD for input[type="date"]
+      date_event: dateEvent.toISOString().substring(0, 10),
       category: news.category,
       location: news.location,
       image: null,
     };
+  }
+
+  onCategoryChange(category: string) {
+    this.formData.category = category;
   }
 
   onUpdate() {
@@ -85,5 +89,12 @@ export class EditFormComponent implements OnInit {
         this.toastr.error('La mise à jour a échoué', 'Erreur !');
         console.error(error);
       });
+  }
+
+  private extractUniqueCategories(newsList: News[]): string[] {
+    const categories = newsList
+      .map(n => n.category)
+      .filter((cat): cat is string => !!cat && cat.trim() !== '');
+    return [...new Set(categories)].sort();
   }
 }
