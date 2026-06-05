@@ -14,28 +14,31 @@ import { ToastrService } from 'ngx-toastr';
   standalone: true,
 })
 export class EditFormComponent implements OnInit {
-
   toastr = inject(ToastrService);
+  isSubmitting = false;
+  selectedNews: News | null = null;
 
   constructor(private database: DatabaseService) {}
 
-  formData = {
-    id: 0,
-    title: '',
-    description: '',
-    content: '',
-    date_event: Date.now().toString(),
-    category: '',
-    location: '',
-    image: null,
-  };
-
+  formData = this.emptyForm();
   newsList: News[] = [];
-
   existingCategories: string[] = [];
 
   ngOnInit() {
     this.loadNews();
+  }
+
+  private emptyForm() {
+    return {
+      id: 0,
+      title: '',
+      description: '',
+      content: '',
+      date_event: new Date().toISOString().substring(0, 10),
+      category: '',
+      location: '',
+      image: null as File | null,
+    };
   }
 
   loadNews() {
@@ -50,9 +53,8 @@ export class EditFormComponent implements OnInit {
   }
 
   onNewsSelected(news: News) {
-    let dateEvent: Date;
-    dateEvent = new Date(news.date_event);
-
+    this.selectedNews = news;
+    const dateEvent = new Date(news.date_event);
     this.formData = {
       id: news.id || 0,
       title: news.title,
@@ -69,11 +71,20 @@ export class EditFormComponent implements OnInit {
     this.formData.category = category;
   }
 
+  onCancel() {
+    if (this.selectedNews) {
+      this.onNewsSelected(this.selectedNews);
+    }
+  }
+
   onUpdate() {
-    const payload: any = {};
+    if (this.isSubmitting) return;
+    this.isSubmitting = true;
+
+    const payload: Partial<News> = {};
     for (const [key, value] of Object.entries(this.formData)) {
       if (value !== null) {
-        payload[key] = value;
+        (payload as any)[key] = value;
       }
     }
 
@@ -81,6 +92,7 @@ export class EditFormComponent implements OnInit {
       .then((updatedNews) => {
         if (updatedNews) {
           this.toastr.success('La mise à jour a réussi', 'Succès !');
+          this.selectedNews = updatedNews;
           this.loadNews();
           this.onNewsSelected(updatedNews);
         }
@@ -88,6 +100,9 @@ export class EditFormComponent implements OnInit {
       .catch((error) => {
         this.toastr.error('La mise à jour a échoué', 'Erreur !');
         console.error(error);
+      })
+      .finally(() => {
+        this.isSubmitting = false;
       });
   }
 

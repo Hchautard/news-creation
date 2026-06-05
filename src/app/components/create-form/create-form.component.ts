@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
+import { FormsModule, NgForm } from '@angular/forms';
 import { DatabaseService } from '../../services/db.service';
 import News from '../../models/News';
 import { CategorySelectComponent } from '../category-select/category-select.component';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-create-form',
@@ -12,23 +13,30 @@ import { CategorySelectComponent } from '../category-select/category-select.comp
   imports: [FormsModule, CategorySelectComponent],
 })
 export class CreateFormComponent implements OnInit {
+  toastr = inject(ToastrService);
+  isSubmitting = false;
+
+  @ViewChild('newsForm') newsForm!: NgForm;
 
   constructor(private database: DatabaseService) {}
 
-  formData: Omit<News, 'id'> = {
-    title: '',
-    description: '',
-    content: '',
-    date_event: new Date().toISOString().substring(0, 10),
-    category: '',
-    location: '',
-    image: null,
-  };
-
+  formData: Omit<News, 'id'> = this.emptyForm();
   existingCategories: string[] = [];
 
   ngOnInit() {
     this.loadCategories();
+  }
+
+  private emptyForm(): Omit<News, 'id'> {
+    return {
+      title: '',
+      description: '',
+      content: '',
+      date_event: new Date().toISOString().substring(0, 10),
+      category: '',
+      location: '',
+      image: null,
+    };
   }
 
   loadCategories() {
@@ -46,12 +54,19 @@ export class CreateFormComponent implements OnInit {
   }
 
   onCreate() {
-    this.database.createNews(this.formData).then((news) => {
-      console.log('Created news:', news);
-      // Recharger les catégories après création (la nouvelle catégorie sera disponible)
+    if (this.isSubmitting) return;
+    this.isSubmitting = true;
+
+    this.database.createNews(this.formData).then(() => {
+      this.toastr.success('La news a été créée avec succès', 'Succès !');
       this.loadCategories();
+      this.formData = this.emptyForm();
+      this.newsForm.resetForm({ date_event: this.formData.date_event });
     }).catch((error) => {
+      this.toastr.error('La création a échoué', 'Erreur !');
       console.error('Error creating news:', error);
+    }).finally(() => {
+      this.isSubmitting = false;
     });
   }
 

@@ -1,80 +1,141 @@
 <div class="edit-form-container mt-4">
-  <h2 class="title is-2">Modifier la news</h2>
+  <h2 class="title is-2">Modifier une news</h2>
 
-  <div class="box is-flex is-flex-direction-row is-justify-content-space-evenly">
-    <p class="subtitle is-4">Sélectionnez une news à modifier :</p>
-    <app-select [newsList]="newsList" (newsSelected)="onNewsSelected($event)"></app-select>
+  <!-- Sélecteur de news -->
+  <div class="box">
+    <div class="is-flex is-align-items-center" style="gap: 1rem;">
+      <span class="icon has-text-grey-light">
+        <i class="material-symbols-outlined" translate="no">article</i>
+      </span>
+      <p class="subtitle is-6 mb-0" style="white-space: nowrap;">News à modifier :</p>
+      <div style="flex: 1;">
+        <app-select [newsList]="newsList" (newsSelected)="onNewsSelected($event)"></app-select>
+      </div>
+    </div>
   </div>
 
-  <form (ngSubmit)="onUpdate()" #editForm="ngForm" class="box">
-
-    <!-- Titre -->
-    <div class="field">
-      <label class="label">Titre</label>
-      <div class="control">
-        <input class="input" type="text" placeholder="Entrez le titre de la news" name="title" [(ngModel)]="formData.title" required>
-      </div>
+  <!-- Placeholder si aucune news sélectionnée -->
+  @if (!selectedNews) {
+    <div class="box has-text-centered has-text-grey py-6">
+      <span class="icon is-large">
+        <i class="material-symbols-outlined" style="font-size: 48px;" translate="no">edit_note</i>
+      </span>
+      <p class="mt-3">Sélectionnez une news ci-dessus pour commencer la modification.</p>
     </div>
+  }
 
-    <!-- Description -->
-    <div class="field">
-      <label class="label">Description</label>
-      <div class="control">
-        <textarea class="textarea" placeholder="Entrez une description courte" name="description" [(ngModel)]="formData.description" required></textarea>
+  <!-- Formulaire d'édition -->
+  @if (selectedNews) {
+    <form (ngSubmit)="onUpdate()" #editForm="ngForm" class="box">
+
+      <!-- Titre -->
+      <div class="field">
+        <label class="label">Titre <span class="has-text-danger">*</span></label>
+        <div class="control">
+          <input
+            class="input"
+            [class.is-danger]="titleField.invalid && titleField.touched"
+            [class.is-success]="titleField.valid && titleField.touched"
+            type="text"
+            placeholder="Titre de la news"
+            name="title"
+            [(ngModel)]="formData.title"
+            #titleField="ngModel"
+            required
+          />
+        </div>
+        @if (titleField.invalid && titleField.touched) {
+          <p class="help is-danger">Le titre est requis.</p>
+        }
       </div>
-    </div>
 
-    <!-- Contenu -->
-    <div class="field">
-      <label class="label">Contenu</label>
-      <div class="control">
-        <textarea class="textarea" placeholder="Entrez le contenu de la news" name="content" [(ngModel)]="formData.content"></textarea>
+      <!-- Description -->
+      <div class="field">
+        <label class="label">Description <span class="has-text-danger">*</span></label>
+        <div class="control">
+          <textarea
+            class="textarea"
+            [class.is-danger]="descField.invalid && descField.touched"
+            [class.is-success]="descField.valid && descField.touched"
+            placeholder="Résumé court de la news"
+            name="description"
+            [(ngModel)]="formData.description"
+            #descField="ngModel"
+            rows="3"
+            required
+          ></textarea>
+        </div>
+        @if (descField.invalid && descField.touched) {
+          <p class="help is-danger">La description est requise.</p>
+        }
       </div>
-    </div>
 
-    <!-- Date de l'événement -->
-    <div class="field">
-      <label class="label">Date de l'événement</label>
-      <div class="control">
-        <input class="input" type="date" name="date_event" [(ngModel)]="formData.date_event">
+      <!-- Contenu -->
+      <div class="field">
+        <label class="label">Contenu</label>
+        <div class="control">
+          <textarea
+            class="textarea"
+            placeholder="Contenu complet de la news"
+            name="content"
+            [(ngModel)]="formData.content"
+            rows="8"
+          ></textarea>
+        </div>
       </div>
-    </div>
 
-    <!-- Catégorie -->
-    <div class="field">
-      <label class="label">Catégorie</label>
-      <app-category-select
-        [categories]="existingCategories"
-        [value]="formData.category"
-        (valueChange)="onCategoryChange($event)">
-      </app-category-select>
-    </div>
-
-    <!-- Lieu -->
-    <div class="field">
-      <label class="label">Lieu</label>
-      <div class="control">
-        <input class="input" type="text" placeholder="Entrez le lieu" name="location" [(ngModel)]="formData.location">
+      <!-- Catégorie -->
+      <div class="field">
+        <label class="label">Catégorie</label>
+        <app-category-select
+          [categories]="existingCategories"
+          [value]="formData.category"
+          (valueChange)="onCategoryChange($event)">
+        </app-category-select>
       </div>
-    </div>
 
-    <!-- Image -->
-    <div class="field">
-      <label class="label">Image (URL)</label>
-      <div class="control">
-        <input class="input" type="url" placeholder="Entrez l'URL de l'image" name="image" [(ngModel)]="formData.image" disabled>
+      <!-- Date + Lieu sur la même ligne -->
+      <div class="columns">
+        <div class="column">
+          <div class="field">
+            <label class="label">Date de l'événement</label>
+            <div class="control">
+              <input class="input" type="date" name="date_event" [(ngModel)]="formData.date_event" />
+            </div>
+          </div>
+        </div>
+        <div class="column">
+          <div class="field">
+            <label class="label">Lieu</label>
+            <div class="control has-icons-left">
+              <input class="input" type="text" placeholder="Ville, pays…" name="location" [(ngModel)]="formData.location" />
+              <span class="icon is-small is-left">
+                <i class="material-symbols-outlined" style="font-size: 18px;" translate="no">location_on</i>
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
 
-    <!-- Boutons -->
-    <div class="field is-grouped">
-      <div class="control">
-        <button class="button is-primary" type="submit" [disabled]="!editForm.form.valid">Enregistrer</button>
+      <!-- Boutons -->
+      <div class="field is-grouped">
+        <div class="control">
+          <button
+            class="button is-primary"
+            [class.is-loading]="isSubmitting"
+            type="submit"
+            [disabled]="!editForm.form.valid || isSubmitting"
+          >
+            Enregistrer
+          </button>
+        </div>
+        <div class="control">
+          <button class="button is-light" type="button" (click)="onCancel()" [disabled]="isSubmitting">
+            Annuler
+          </button>
+        </div>
       </div>
-      <div class="control">
-        <button class="button is-light" type="button">Annuler</button>
-      </div>
-    </div>
 
-  </form>
+    </form>
+  }
 </div>
