@@ -27,11 +27,25 @@ export class DatabaseService {
   }
 
   async createNews(news: News): Promise<void> {
-    const { data, error } = await this.supabase.from('news').insert(news);
+    const { error } = await this.supabase.from('news').insert(news);
     if (error) {
       console.error(error);
-    } else {
-      console.log('News item created:', data);
+      throw error;
+    }
+  }
+
+  async deleteNews(ids: number[]): Promise<void> {
+    const { data, error } = await this.supabase
+      .from('news')
+      .delete()
+      .in('id', ids)
+      .select('id');
+    if (error) {
+      console.error(error);
+      throw error;
+    }
+    if (!data || data.length === 0) {
+      throw new Error('Aucune ligne supprimée — vérifiez les politiques RLS Supabase pour DELETE.');
     }
   }
 
