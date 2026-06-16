@@ -9,6 +9,7 @@
         (focus)="onFocus()"
         (blur)="onBlur()"
         (ngModelChange)="onInputChange()"
+        (keydown.enter)="onEnter($event)"
         name="categoryInput"
       />
       <span class="icon is-small is-right">

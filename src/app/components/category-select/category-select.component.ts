@@ -42,6 +42,7 @@ export class CategorySelectComponent implements OnChanges {
   }
 
   onFocus() {
+    this.isCreatingNew = false;
     this.isOpen = true;
     this.filteredCategories = this.getFiltered();
   }
@@ -53,10 +54,17 @@ export class CategorySelectComponent implements OnChanges {
   }
 
   onInputChange() {
-    this.isOpen = true;
-    this.isCreatingNew = false;
-    this.filteredCategories = this.getFiltered();
+    if (!this.isCreatingNew) {
+      this.isOpen = true;
+      this.filteredCategories = this.getFiltered();
+    }
     this.valueChange.emit(this.inputValue);
+  }
+
+  onEnter(event: Event) {
+    event.preventDefault();
+    this.isOpen = false;
+    this.isCreatingNew = false;
   }
 
   selectCategory(category: string) {
