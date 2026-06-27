@@ -98,9 +98,9 @@
       </div>
     </div>
 
-    <!-- Bouton de soumission -->
+    <!-- Boutons -->
     <div class="field">
-      <div class="control">
+      <div class="control is-flex" style="gap: 0.75rem; flex-wrap: wrap;">
         <button
           class="button is-primary"
           [class.is-loading]="isSubmitting"
@@ -109,8 +109,22 @@
         >
           Créer la news
         </button>
+        <button
+          class="button is-dark"
+          type="button"
+          (click)="showPreview = true"
+        >
+          <span class="icon is-small">
+            <i class="material-symbols-outlined" style="font-size: 18px;" translate="no">visibility</i>
+          </span>
+          <span>Visualiser</span>
+        </button>
       </div>
     </div>
 
   </form>
 </div>
+
+@if (showPreview) {
+  <app-preview-modal [news]="formData" (close)="showPreview = false"></app-preview-modal>
+}

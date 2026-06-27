@@ -118,7 +118,7 @@
       </div>
 
       <!-- Boutons -->
-      <div class="field is-grouped">
+      <div class="field is-grouped is-flex" style="gap: 0.75rem; flex-wrap: wrap;">
         <div class="control">
           <button
             class="button is-primary"
@@ -134,8 +134,20 @@
             Annuler
           </button>
         </div>
+        <div class="control">
+          <button class="button is-dark" type="button" (click)="showPreview = true">
+            <span class="icon is-small">
+              <i class="material-symbols-outlined" style="font-size: 18px;" translate="no">visibility</i>
+            </span>
+            <span>Visualiser</span>
+          </button>
+        </div>
       </div>
 
     </form>
   }
 </div>
+
+@if (showPreview) {
+  <app-preview-modal [news]="formData" (close)="showPreview = false"></app-preview-modal>
+}

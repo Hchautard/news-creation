@@ -3,6 +3,7 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { DatabaseService } from '../../services/db.service';
 import News from '../../models/News';
 import { CategorySelectComponent } from '../category-select/category-select.component';
+import { PreviewModalComponent } from '../preview-modal/preview-modal.component';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -10,11 +11,12 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './create-form.component.html',
   styleUrls: ['./create-form.component.css'],
   standalone: true,
-  imports: [FormsModule, CategorySelectComponent],
+  imports: [FormsModule, CategorySelectComponent, PreviewModalComponent],
 })
 export class CreateFormComponent implements OnInit {
   toastr = inject(ToastrService);
   isSubmitting = false;
+  showPreview = false;
 
   @ViewChild('newsForm') newsForm!: NgForm;
 

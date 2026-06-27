@@ -1,0 +1,39 @@
+<div class="preview-overlay" (click)="onOverlayClick($event)" role="dialog" aria-modal="true" aria-label="Prévisualisation de la news">
+
+  <button class="preview-close-btn" (click)="close.emit()" type="button" aria-label="Fermer la prévisualisation">
+    <i class="material-symbols-outlined" translate="no">close</i>
+  </button>
+
+  <article class="news-preview">
+    <div class="news-preview-inner">
+
+      <button class="news-preview-back" (click)="close.emit()" type="button">
+        ← Retour
+      </button>
+
+      <div class="news-preview-cover" [style.background]="getCoverBackground()">
+        <div class="news-preview-cover-label">Image de couverture</div>
+      </div>
+
+      <header class="news-preview-header">
+        @if (news.category) {
+          <span class="news-preview-category">{{ news.category }}</span>
+        }
+        <h1 class="news-preview-title">{{ news.title || 'Titre de la news' }}</h1>
+        @if (formattedDate || news.location) {
+          <p class="news-preview-meta">
+            {{ formattedDate }}
+            @if (formattedDate && news.location) {
+              &nbsp;|&nbsp;
+            }
+            {{ news.location }}
+          </p>
+        }
+      </header>
+
+      <div class="news-preview-body" [innerHTML]="renderedContent"></div>
+
+    </div>
+  </article>
+
+</div>

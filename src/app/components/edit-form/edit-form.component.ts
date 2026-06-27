@@ -4,19 +4,21 @@ import News from '../../models/News';
 import { DatabaseService } from '../../services/db.service';
 import { SelectComponent } from '../select/select.component';
 import { CategorySelectComponent } from '../category-select/category-select.component';
+import { PreviewModalComponent } from '../preview-modal/preview-modal.component';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-edit-form',
   templateUrl: './edit-form.component.html',
   styleUrls: ['./edit-form.component.css'],
-  imports: [FormsModule, SelectComponent, CategorySelectComponent],
+  imports: [FormsModule, SelectComponent, CategorySelectComponent, PreviewModalComponent],
   standalone: true,
 })
 export class EditFormComponent implements OnInit {
   toastr = inject(ToastrService);
   isSubmitting = false;
   selectedNews: News | null = null;
+  showPreview = false;
 
   constructor(private database: DatabaseService) {}
 
